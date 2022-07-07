@@ -99,7 +99,7 @@ WHERE emp_no IN (SELECT emp_no FROM `dept_emp`
                  AND to_date > CURRENT_DATE)
 =
 emp_no IN (SELECT DISTINCT emp_no FROM salaries
-           WHERE salary > 7500);
+           WHERE salary > 75000);
 
 SELECT first_name, last_name FROM `employees`
 WHERE emp_no IN (SELECT emp_no FROM `dept_emp`
@@ -107,7 +107,7 @@ WHERE emp_no IN (SELECT emp_no FROM `dept_emp`
                  AND to_date > CURRENT_DATE)
 =
 emp_no IN (SELECT DISTINCT emp_no FROM salaries
-           WHERE salary > 7500);
+           WHERE salary > 75000);
 
 --9. Report:  We need a table with employees, who are working for us at this moment: first and last name, date of birth, gender, hire_date, title and salary.
 
