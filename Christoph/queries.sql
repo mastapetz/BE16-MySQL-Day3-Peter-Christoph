@@ -111,13 +111,14 @@ emp_no IN (SELECT DISTINCT emp_no FROM salaries
 
 --9. Report:  We need a table with employees, who are working for us at this moment: first and last name, date of birth, gender, hire_date, title and salary.
 
-SELECT DISTINCT first_name, last_name, birth_date, gender, hire_date, title, salary FROM `employees`
+SELECT first_name, last_name, birth_date, gender, hire_date, title, salary FROM `employees`
 INNER JOIN `titles` ON titles.emp_no = employees.emp_no
 INNER JOIN `salaries` ON salaries.emp_no = employees.emp_no
 WHERE employees.emp_no IN (SELECT dept_emp.emp_no FROM `dept_emp`
-                 WHERE to_date > CURRENT_DATE);
+                 WHERE to_date > CURRENT_DATE)
+AND salaries.salary = (SELECT MAX(salary) FROM `salaries` WHERE employees.emp_no = salaries.emp_no);
 
---not a very pretty solution, since this will give out multiple entries per employee for ALL their salaries they have received so far
+--gives us a table of all employees with their highest salaries, if they have been paid said salary multiple times, we will get multiple entries as well
 
 --10. Report:  We need a table with managers, who are working for us at this moment: first and last name, date of birth, gender, hire_date, title, department name and salary.
 
@@ -127,6 +128,7 @@ INNER JOIN `titles` ON employees.emp_no = titles.emp_no
 INNER JOIN `salaries` ON employees.emp_no = salaries.emp_no
 INNER JOIN `dept_manager` ON employees.emp_no = dept_manager.emp_no
 INNER JOIN `departments` ON dept_manager.dept_no = departments.dept_no
-WHERE dept_manager.to_date > CURRENT_DATE;
+WHERE dept_manager.to_date > CURRENT_DATE
+AND salaries.salary = (SELECT MAX(salary) FROM `salaries` WHERE employees.emp_no = salaries.emp_no);
 
---same problem as before, we get multiple entries per person for each salary they have received
+--this will only show the highest salary each manager has received, if the highest salary has been paid multiple times we will still get multiple entries
